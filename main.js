@@ -1,6 +1,3 @@
-// ============================================
-// FIREBASE SETUP & IMPORTS
-// ============================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth,
@@ -23,7 +20,7 @@ import {
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Firebase configuration
+
 const firebaseConfig = {
   apiKey: "AIzaSyA1Z5LkTwaVL_QM5IWiDs4uNKnT34r1T60",
   authDomain: "edustream-42dff.firebaseapp.com",
@@ -35,23 +32,15 @@ const firebaseConfig = {
 
 const ADMIN_SECRET = "EduAdmin2024!";
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
 
-/**
- * Get DOM element by ID
- */
 const $ = id => document.getElementById(id);
 
-/**
- * Show error message
- */
+
 const showErr = message => {
   const errorElement = $('aerr');
   errorElement.textContent = message;
@@ -61,9 +50,7 @@ const showErr = message => {
   }, 4500);
 };
 
-/**
- * Show success message
- */
+
 const showOk = message => {
   const successElement = $('aok');
   successElement.textContent = message;
@@ -72,10 +59,6 @@ const showOk = message => {
     successElement.style.display = 'none';
   }, 4000);
 };
-
-// ============================================
-// GLOBAL STATE VARIABLES
-// ============================================
 
 let COURSES = {
   math: 'Mathematics',
@@ -92,13 +75,7 @@ let currentSource = 'youtube';
 let currentUser = null;
 let currentUserData = null;
 
-// ============================================
-// DATA LOADING FUNCTIONS
-// ============================================
 
-/**
- * Load all groups from Firestore
- */
 async function loadGroups() {
   GROUPS = {};
   const snapshot = await getDocs(collection(db, 'groups'));
@@ -107,9 +84,7 @@ async function loadGroups() {
   });
 }
 
-/**
- * Load all students from Firestore
- */
+
 async function loadStudents() {
   ALL_STUDENTS = [];
   const snapshot = await getDocs(
@@ -120,31 +95,21 @@ async function loadStudents() {
   });
 }
 
-// ============================================
-// HELPER FUNCTIONS - LABELS & FORMATTING
-// ============================================
 
-/**
- * Get readable course label
- */
 function courseLabel(courseCode) {
   return courseCode === 'all'
     ? 'All Courses'
     : COURSES[courseCode] || courseCode;
 }
 
-/**
- * Get readable group label
- */
+
 function groupLabel(groupId) {
   return groupId === 'all'
     ? 'All Groups'
     : GROUPS[groupId]?.name || groupId;
 }
 
-/**
- * Get emoji for group based on group name
- */
+
 function groupEmoji(name = '') {
   const emojis = ['📘', '📗', '📙', '📕', '📓', '📔', '🟦', '🟩', '🟧', '🟥'];
   let hash = 0;
@@ -154,13 +119,7 @@ function groupEmoji(name = '') {
   return emojis[hash % emojis.length];
 }
 
-// ============================================
-// TAB SWITCHING & UI NAVIGATION
-// ============================================
 
-/**
- * Switch between login and admin registration tabs
- */
 window.switchTab = tabType => {
   $('lf').style.display = tabType === 'l' ? 'block' : 'none';
   $('af').style.display = tabType === 'a' ? 'block' : 'none';
@@ -170,21 +129,13 @@ window.switchTab = tabType => {
   });
 };
 
-/**
- * Toggle between admin login and registration forms
- */
+
 window.toggleAdminReg = show => {
   $('admin-login-form').style.display = show ? 'none' : 'block';
   $('admin-reg-form').style.display = show ? 'block' : 'none';
 };
 
-// ============================================
-// AUTHENTICATION FUNCTIONS
-// ============================================
 
-/**
- * Handle student/user login
- */
 window.doLogin = async () => {
   const email = $('le').value.trim().toLowerCase();
   const password = $('lp').value;
@@ -206,9 +157,7 @@ window.doLogin = async () => {
   }
 };
 
-/**
- * Handle admin login
- */
+
 window.doAdminLogin = async () => {
   const email = $('ale').value.trim().toLowerCase();
   const password = $('alp').value;
@@ -229,9 +178,7 @@ window.doAdminLogin = async () => {
   }
 };
 
-/**
- * Handle admin registration
- */
+
 window.doAdminRegister = async () => {
   const name = $('an').value.trim();
   const email = $('ae').value.trim().toLowerCase();
@@ -268,34 +215,29 @@ window.doAdminRegister = async () => {
   }
 };
 
-/**
- * Handle logout
- */
+
 window.doLogout = () => signOut(auth);
 
-// ============================================
-// AUTHENTICATION STATE LISTENER
-// ============================================
 
 onAuthStateChanged(auth, async user => {
-  // Hide loader
+
   $('global-loader').classList.add('hide');
 
   if (!user) {
-    // User is logged out
+    
     $('auth-screen').style.display = 'flex';
     $('app-screen').style.display = 'none';
     return;
   }
 
-  // User is logged in
+ 
   $('auth-screen').style.display = 'none';
   $('app-screen').style.display = 'block';
 
-  // Load groups
+  
   await loadGroups();
 
-  // Get user data
+  
   const userSnapshot = await getDoc(doc(db, 'users', user.uid));
   if (!userSnapshot.exists()) {
     await signOut(auth);
@@ -306,10 +248,8 @@ onAuthStateChanged(auth, async user => {
   currentUser = user;
   currentUserData = userData;
 
-  // Display user name
   $('nName').textContent = userData.name;
 
-  // Check if admin or student
   if (userData.role === 'admin') {
     $('adminChip').style.display = 'flex';
     $('admin-panel').style.display = 'block';
@@ -323,13 +263,6 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-// ============================================
-// STUDENT GROUP PICKER
-// ============================================
-
-/**
- * Show groups available to student
- */
 function showGroupPicker(userData) {
   $('admin-panel').style.display = 'none';
   $('student-content').style.display = 'none';
@@ -370,9 +303,7 @@ function showGroupPicker(userData) {
   });
 }
 
-/**
- * Enter a specific group and load its content
- */
+
 function enterGroup(groupId, groupData) {
   $('group-picker').style.display = 'none';
   $('student-content').style.display = 'block';
@@ -386,28 +317,20 @@ function enterGroup(groupId, groupData) {
   loadStudentVideos(groupData.courseId, groupId);
 }
 
-/**
- * Go back to group picker from student content
- */
+
 window.backToGroupPicker = () => {
   $('student-content').style.display = 'none';
   $('groupChip').style.display = 'none';
   showGroupPicker(currentUserData);
 };
 
-// ============================================
-// STUDENT VIDEO LOADING
-// ============================================
 
-/**
- * Load videos for student's group
- */
+
 async function loadStudentVideos(courseId, groupId) {
   const grid = $('vgrid');
   grid.innerHTML = '<div class="loading"><div class="spin"></div>Loading videos…</div>';
 
   try {
-    // Query videos by: group+course, then all group, then all
     const queries = [
       getDocs(
         query(
@@ -509,13 +432,7 @@ async function loadStudentVideos(courseId, groupId) {
   }
 }
 
-// ============================================
-// ADMIN PANEL INITIALIZATION
-// ============================================
 
-/**
- * Initialize admin panel and load all data
- */
 async function initAdminPanel() {
   populateCourseSelect('vc');
   populateCourseSelect('fc');
@@ -528,9 +445,7 @@ async function initAdminPanel() {
   window.loadAdminVideos();
 }
 
-/**
- * Populate a course select dropdown
- */
+
 function populateCourseSelect(elementId, includeAll = true) {
   const select = $(elementId);
   if (!select) return;
@@ -548,9 +463,7 @@ function populateCourseSelect(elementId, includeAll = true) {
   });
 }
 
-/**
- * Populate a group select dropdown
- */
+
 function populateGroupSelect(elementId, courseFilter = '', includeAll = true) {
   const select = $(elementId);
   if (!select) return;
@@ -577,13 +490,6 @@ function populateGroupSelect(elementId, courseFilter = '', includeAll = true) {
     });
 }
 
-// ============================================
-// ADMIN PANEL TABS
-// ============================================
-
-/**
- * Show admin panel section (videos, groups, students)
- */
 window.showAdminTab = tab => {
   ['videos', 'groups', 'students'].forEach(tabName => {
     $(tabName + '-section').style.display = tabName === tab ? 'block' : 'none';
@@ -598,13 +504,7 @@ window.showAdminTab = tab => {
   if (tab === 'students') renderStudentsList();
 };
 
-// ============================================
-// VIDEO MANAGEMENT (ADMIN)
-// ============================================
 
-/**
- * Switch between YouTube and Google Drive source
- */
 window.switchSource = type => {
   currentSource = type;
   $('stab-yt').classList.toggle('on', type === 'youtube');
@@ -623,24 +523,18 @@ window.switchSource = type => {
     : 'https://drive.google.com/file/d/.../view';
 };
 
-/**
- * Update group dropdown based on selected course
- */
+
 window.updateAdminGroups = () => {
   populateGroupSelect('vg', $('vc').value, true);
 };
 
-/**
- * Filter videos by course and group
- */
+
 window.filterAdminGroups = () => {
   populateGroupSelect('fg2', $('fc').value, true);
   loadAdminVideos();
 };
 
-/**
- * Add a new video
- */
+
 window.addVideo = async () => {
   const title = $('vt').value.trim();
   const rawUrl = $('vu').value.trim();
@@ -688,9 +582,7 @@ window.addVideo = async () => {
   }
 };
 
-/**
- * Load and display admin videos list
- */
+
 window.loadAdminVideos = async () => {
   const course = $('fc').value;
   const group = $('fg2').value;
@@ -742,22 +634,14 @@ window.loadAdminVideos = async () => {
   }
 };
 
-/**
- * Delete a video
- */
+
 window.delVideo = async id => {
   if (!confirm('Delete this video?')) return;
   await deleteDoc(doc(db, 'videos', id));
   loadAdminVideos();
 };
 
-// ============================================
-// GROUP MANAGEMENT (ADMIN)
-// ============================================
 
-/**
- * Create a new group
- */
 window.createGroup = async () => {
   const name = $('gname').value.trim();
   const courseId = $('gcourse').value;
@@ -782,9 +666,7 @@ window.createGroup = async () => {
   showOk('✅ Group created!');
 };
 
-/**
- * Render list of all groups
- */
+
 async function renderGroupsList() {
   await loadGroups();
   const container = $('groups-list');
@@ -811,9 +693,7 @@ async function renderGroupsList() {
   });
 }
 
-/**
- * Delete a group
- */
+
 window.deleteGroup = async id => {
   if (!confirm('Delete this group?')) return;
   await deleteDoc(doc(db, 'groups', id));
@@ -823,13 +703,7 @@ window.deleteGroup = async id => {
   renderGroupsList();
 };
 
-// ============================================
-// STUDENT MANAGEMENT (ADMIN)
-// ============================================
 
-/**
- * Build checkboxes for group selection
- */
 function buildGroupCheckboxes(containerId, selectedIds = []) {
   const container = $(containerId);
   container.innerHTML = '';
@@ -859,16 +733,12 @@ function buildGroupCheckboxes(containerId, selectedIds = []) {
   });
 }
 
-/**
- * Render groups in add student form
- */
+
 function renderAddStudentGroups() {
   buildGroupCheckboxes('add-student-groups');
 }
 
-/**
- * Render group filter dropdown for students
- */
+
 function renderStudentGroupFilter() {
   const select = $('student-group-filter');
   select.innerHTML = '<option value="">All Groups</option>';
@@ -881,18 +751,14 @@ function renderStudentGroupFilter() {
   });
 }
 
-/**
- * Get checked group IDs from checkboxes
- */
+
 function getCheckedGroups(containerId) {
   return [
     ...$(containerId).querySelectorAll('input[type=checkbox]:checked')
   ].map(checkbox => checkbox.value);
 }
 
-/**
- * Add a new student
- */
+
 window.addStudent = async () => {
   const name = $('sn').value.trim();
   const email = $('se').value.trim().toLowerCase();
@@ -936,9 +802,7 @@ window.addStudent = async () => {
   }
 };
 
-/**
- * Render list of students with search and filter
- */
+
 window.renderStudentsList = () => {
   const searchQuery = $('student-search').value.trim().toLowerCase();
   const groupFilter = $('student-group-filter').value;
@@ -990,9 +854,7 @@ window.renderStudentsList = () => {
   });
 };
 
-/**
- * Open modal to edit student
- */
+
 window.openEditModal = uid => {
   const student = ALL_STUDENTS.find(s => s.uid === uid);
   if (!student) return;
@@ -1003,25 +865,19 @@ window.openEditModal = uid => {
   $('edit-modal').style.display = 'flex';
 };
 
-/**
- * Close edit modal
- */
+
 window.closeEditModal = () => {
   $('edit-modal').style.display = 'none';
 };
 
-/**
- * Close modal when clicking outside
- */
+
 window.closeEditOut = event => {
   if (event.target.id === 'edit-modal') {
     closeEditModal();
   }
 };
 
-/**
- * Save edited student data
- */
+
 window.saveEditStudent = async () => {
   const uid = $('edit-uid').value;
   const name = $('edit-name').value.trim();
@@ -1052,9 +908,7 @@ window.saveEditStudent = async () => {
   }
 };
 
-/**
- * Delete a student
- */
+
 window.deleteStudent = async (uid, name) => {
   if (!confirm(`Delete student "${name}"? This only removes their data, not their auth account.`)) {
     return;
@@ -1065,13 +919,7 @@ window.deleteStudent = async (uid, name) => {
   renderStudentsList();
 };
 
-// ============================================
-// VIDEO MODALS (YOUTUBE & GOOGLE DRIVE)
-// ============================================
 
-/**
- * Open YouTube video modal
- */
 window.openModalYT = (videoId, title, description) => {
   $('mt').textContent = title;
   $('mif').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
@@ -1080,9 +928,7 @@ window.openModalYT = (videoId, title, description) => {
   $('vmodal').style.display = 'flex';
 };
 
-/**
- * Open Google Drive file modal
- */
+
 window.openModalDrive = (fileId, title, description) => {
   $('mt').textContent = title;
   $('mif').src = `https://drive.google.com/file/d/${fileId}/preview`;
@@ -1092,30 +938,19 @@ window.openModalDrive = (fileId, title, description) => {
   $('vmodal').style.display = 'flex';
 };
 
-/**
- * Close video modal
- */
 window.closeModal = () => {
   $('vmodal').style.display = 'none';
   $('mif').src = '';
 };
 
-/**
- * Close modal when clicking outside
- */
+
 window.closeOut = event => {
   if (event.target.id === 'vmodal') {
     closeModal();
   }
 };
 
-// ============================================
-// HELPER FUNCTIONS - URL EXTRACTION
-// ============================================
 
-/**
- * Extract YouTube video ID from URL or plain ID
- */
 function extractYTId(input) {
   input = input.trim();
 
@@ -1134,25 +969,23 @@ function extractYTId(input) {
   return null;
 }
 
-/**
- * Extract Google Drive file ID from URL or plain ID
- */
+
 function extractDriveId(input) {
   input = input.trim();
 
-  // Try /d/ID pattern
+
   const match1 = input.match(/\/d\/([a-zA-Z0-9_-]{20,})/);
   if (match1) {
     return match1[1];
   }
 
-  // Try ?id=ID pattern
+  
   const match2 = input.match(/[?&]id=([a-zA-Z0-9_-]{20,})/);
   if (match2) {
     return match2[1];
   }
 
-  // Try plain ID
+ 
   if (/^[a-zA-Z0-9_-]{20,}$/.test(input)) {
     return input;
   }
