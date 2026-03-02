@@ -1,36 +1,30 @@
-/* ============================================
-   DESIGN SYSTEM - Color & Layout Variables
-   ============================================ */
 :root {
-  /* Primary Colors */
+ 
   --primary: #1e3a8a;
   --primary-light: #2d5aa3;
   --primary-dark: #0f2456;
 
-  /* Accent Colors */
+  
   --accent: #d4a574;
   --accent-light: #e8c9a5;
   --accent-dark: #b8925e;
 
-  /* Backgrounds */
+  
   --bg: #0a0e27;
   --s1: #141829;
   --s2: #1a2038;
   --s3: #242d47;
 
-  /* Text & Borders */
+  
   --text: #f5f7fa;
   --muted: #a0a8c0;
   --border: rgba(212, 165, 116, 0.15);
 
-  /* Spacing & Effects */
+
   --r: 12px;
   --shadow: 0 20px 60px rgba(30, 58, 138, 0.25);
 }
 
-/* ============================================
-   GLOBAL STYLES
-   ============================================ */
 * {
   margin: 0;
   padding: 0;
@@ -45,7 +39,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Decorative background gradients */
+
 body::before {
   content: '';
   position: fixed;
@@ -70,9 +64,7 @@ body::after {
   z-index: 0;
 }
 
-/* ============================================
-   LOADER SCREEN
-   ============================================ */
+
 #global-loader {
   position: fixed;
   inset: 0;
@@ -135,9 +127,6 @@ body::after {
   }
 }
 
-/* ============================================
-   AUTHENTICATION SCREEN
-   ============================================ */
 #auth-screen {
   display: flex;
   align-items: center;
@@ -171,7 +160,7 @@ body::after {
   }
 }
 
-/* Auth banner (left side) */
+
 .auth-banner {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   padding: 3.5rem 3rem;
@@ -256,7 +245,7 @@ body::after {
   backdrop-filter: blur(10px);
 }
 
-/* Auth form body */
+
 .auth-body {
   padding: 3rem;
   flex: 1;
@@ -298,7 +287,7 @@ body::after {
   color: var(--primary);
 }
 
-/* Form elements */
+
 .fg {
   margin-bottom: 1.25rem;
 }
@@ -344,7 +333,7 @@ body::after {
   gap: 0.9rem;
 }
 
-/* Buttons */
+
 .btn {
   width: 100%;
   padding: 0.95rem;
@@ -377,7 +366,7 @@ body::after {
   box-shadow: 0 12px 35px rgba(212, 165, 116, 0.35);
 }
 
-/* Alert messages */
+
 .alert {
   border-radius: 10px;
   padding: 0.85rem 1.2rem;
@@ -413,7 +402,7 @@ body::after {
   box-shadow: 0 4px 15px rgba(212, 165, 116, 0.2);
 }
 
-/* Mobile responsive */
+
 @media (max-width: 640px) {
   .auth-wrap {
     flex-direction: column;
@@ -448,9 +437,7 @@ body::after {
   }
 }
 
-/* ============================================
-   APPLICATION SCREEN
-   ============================================ */
+
 #app-screen {
   display: none;
   min-height: 100vh;
@@ -458,7 +445,7 @@ body::after {
   z-index: 1;
 }
 
-/* Navigation bar */
+
 nav {
   display: flex;
   align-items: center;
@@ -501,7 +488,7 @@ nav {
   flex-wrap: wrap;
 }
 
-/* Chips/badges */
+
 .chip {
   background: var(--s2);
   border: 1px solid var(--border);
@@ -550,7 +537,7 @@ nav {
   background: var(--accent);
 }
 
-/* Logout button */
+
 .btn-lo {
   background: transparent;
   border: 1px solid var(--border);
@@ -572,9 +559,7 @@ nav {
   background: rgba(212, 165, 116, 0.05);
 }
 
-/* ============================================
-   GROUP PICKER SCREEN
-   ============================================ */
+
 #group-picker {
   display: none;
   min-height: 100vh;
@@ -681,9 +666,7 @@ nav {
   color: var(--accent);
 }
 
-/* ============================================
-   ADMIN PANEL
-   ============================================ */
+
 #admin-panel {
   display: none;
   padding: 2.5rem;
@@ -884,9 +867,7 @@ nav {
   transform: translateY(-1px);
 }
 
-/* ============================================
-   SOURCE TABS
-   ============================================ */
+
 .source-tabs {
   display: flex;
   gap: 0.5rem;
@@ -954,9 +935,7 @@ nav {
   border: 1px solid rgba(212, 165, 116, 0.2);
 }
 
-/* ============================================
-   GROUPS SECTION
-   ============================================ */
+
 #groups-section {
   display: none;
 }
@@ -1054,9 +1033,6 @@ nav {
   }
 }
 
-/* ============================================
-   STUDENTS SECTION
-   ============================================ */
 #students-section {
   display: none;
 }
@@ -1199,9 +1175,7 @@ nav {
   margin-bottom: 0.9rem;
 }
 
-/* ============================================
-   STUDENT CONTENT
-   ============================================ */
+
 #student-content {
   display: none;
   padding: 2.5rem;
@@ -1296,7 +1270,7 @@ nav {
   font-weight: 700;
 }
 
-/* Video grid */
+
 .vgrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -1412,7 +1386,7 @@ nav {
   line-height: 1.6;
 }
 
-/* Empty states */
+
 .empty {
   grid-column: 1 / -1;
   text-align: center;
@@ -1448,9 +1422,7 @@ nav {
   }
 }
 
-/* ============================================
-   MODAL STYLES
-   ============================================ */
+
 .overlay {
   position: fixed;
   inset: 0;
