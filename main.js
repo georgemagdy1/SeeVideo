@@ -1,7 +1,4 @@
-// ══════════════════════════════════════════
-//   TATAWAR ACADEMY — main.js (updated)
-//   Firebase JS SDK v11 (latest modular)
-// ══════════════════════════════════════════
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -1274,3 +1271,4 @@ window.delVideoFromBrowser = async id => {
     loadAdminVideos();
   } catch(e) { alert(e.message); }
 };
+
